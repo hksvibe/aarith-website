@@ -10,13 +10,31 @@ import { cn } from "@/lib/utils";
 function CaseImage({
   src,
   fallback,
-  alt
+  alt,
+  fit = "cover"
 }: {
   src: string;
   fallback: string;
   alt: string;
+  fit?: "cover" | "contain";
 }) {
   const [current, setCurrent] = React.useState(src);
+  if (fit === "contain") {
+    return (
+      <div className="relative h-full w-full bg-gradient-to-br from-ink-900 via-ink-950 to-ink-900">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(16,185,129,0.18),_transparent_60%)]" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={current}
+          alt={alt}
+          onError={() => {
+            if (current !== fallback) setCurrent(fallback);
+          }}
+          className="absolute inset-0 m-auto h-3/5 w-3/5 object-contain transition-transform duration-700 will-change-transform group-hover:scale-[1.06] drop-shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+        />
+      </div>
+    );
+  }
   return (
     /* eslint-disable-next-line @next/next/no-img-element */
     <img
@@ -64,6 +82,7 @@ export function CaseStudies() {
                     src={cs.image ?? `/api/placeholder/${1200}/${750 + i * 30}`}
                     fallback={`/api/placeholder/${1200}/${750 + i * 30}`}
                     alt={cs.imageAlt ?? cs.name}
+                    fit={cs.imageFit ?? "cover"}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/10 to-transparent" />
                   <span className="absolute left-5 top-5 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-ink-900/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-white backdrop-blur">

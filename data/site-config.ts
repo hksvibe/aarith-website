@@ -83,6 +83,9 @@ export const CASE_STUDIES: {
   span: string;
   image?: string;
   imageAlt?: string;
+  // "cover" (default) crops to fill the card.
+  // "contain" centers the image on a brand backdrop — use for logos / icons.
+  imageFit?: "cover" | "contain";
 }[] = [
   {
     name: "Vriddhi — Practical skills, in your language",
@@ -104,7 +107,8 @@ export const CASE_STUDIES: {
     href: "https://play.google.com/store/apps/details?id=emi_trackerapp.vriddhi",
     span: "lg:col-span-5",
     image: "/emi-loan-tracker.png",
-    imageAlt: "EMI Calculator and Loan Tracker app on Android"
+    imageAlt: "EMI Calculator and Loan Tracker app on Android",
+    imageFit: "contain"
   },
   {
     name: "Harsh Kumar Sharma — Personal portfolio",
