@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Aarith">
+  <defs>
+    <linearGradient id="aarith-mark" x1="6%" y1="8%" x2="94%" y2="92%">
+      <stop offset="0%" stop-color="#FF6B3D"/>
+      <stop offset="32%" stop-color="#FF2D87"/>
+      <stop offset="62%" stop-color="#A93BD9"/>
+      <stop offset="100%" stop-color="#3B5BDB"/>
+    </linearGradient>
+  </defs>
+  <path
+    fill="url(#aarith-mark)"
+    d="M42 16 A8 8 0 0 1 58 16 L58 42 L84 42 A8 8 0 0 1 84 58 L58 58 L58 84 A8 8 0 0 1 42 84 L42 58 L16 58 A8 8 0 0 1 16 42 L42 42 Z"
+  />
+</svg>
