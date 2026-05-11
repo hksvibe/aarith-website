@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { COMPANY_NAME } from "@/data/site-config";
+import { LEGAL_NAME_SHORT } from "@/data/site-config";
 import { SuccessBridge } from "./SuccessBridge";
 
 export const metadata: Metadata = {
-  title: `Subscription confirmed — ${COMPANY_NAME}`,
+  title: `Subscription confirmed — ${LEGAL_NAME_SHORT}`,
   robots: { index: false, follow: false }
 };
 
@@ -30,7 +30,7 @@ export default function PaySuccessPage({
         <div className="mb-8 flex items-center gap-2.5">
           <Logo size={28} />
           <span className="text-sm font-semibold tracking-tight text-white">
-            {COMPANY_NAME}
+            {LEGAL_NAME_SHORT}
           </span>
         </div>
 
@@ -67,7 +67,7 @@ export default function PaySuccessPage({
               href="/"
               className="inline-flex w-fit items-center gap-1.5 text-sm text-ink-300 hover:text-white"
             >
-              ← Back to {COMPANY_NAME}
+              ← Back to home
             </Link>
           </div>
         </div>

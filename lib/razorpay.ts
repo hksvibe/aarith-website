@@ -70,6 +70,57 @@ export function resolvePlanIdBySlug(slug: string): string | null {
   return id;
 }
 
+// ---------- Live plan lookup ----------------------------------------------
+
+export type LivePlan = {
+  amountInr: number;
+  currency: string;
+  // Razorpay returns these on the plan object — useful for display sanity.
+  period: "daily" | "weekly" | "monthly" | "yearly" | string;
+  interval: number;
+  itemName?: string;
+};
+
+/**
+ * Fetch the *live* price of a plan from Razorpay so the website is always in
+ * sync with whatever you set in the Razorpay Dashboard. Returns null on any
+ * failure (missing env var, network error, unknown plan) so callers can fall
+ * back to the static value in PRICING_PLANS.
+ *
+ * Note: Razorpay's plan amount is stored in paise. We round down to rupees
+ * for display.
+ */
+export async function fetchLivePlan(slug: string): Promise<LivePlan | null> {
+  const planId = resolvePlanIdBySlug(slug);
+  if (!planId) return null;
+  try {
+    const rzp = getRazorpayClient();
+    // Razorpay's TS types are partial; cast to a shape we actually need.
+    const plan = (await rzp.plans.fetch(planId)) as unknown as {
+      period?: string;
+      interval?: number;
+      item?: {
+        amount?: number;
+        currency?: string;
+        name?: string;
+      };
+    };
+    const paise = plan?.item?.amount;
+    if (typeof paise !== "number") return null;
+    return {
+      amountInr: Math.round(paise / 100),
+      currency: plan?.item?.currency ?? "INR",
+      period: plan?.period ?? "monthly",
+      interval: plan?.interval ?? 1,
+      itemName: plan?.item?.name
+    };
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn(`[razorpay] fetchLivePlan(${slug}) failed:`, err);
+    return null;
+  }
+}
+
 // ---------- Signature verification ----------------------------------------
 
 /**

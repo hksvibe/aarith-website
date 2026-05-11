@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { AlertTriangle } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { COMPANY_NAME } from "@/data/site-config";
+import { LEGAL_NAME_SHORT } from "@/data/site-config";
 import { FailureBridge } from "./FailureBridge";
 
 export const metadata: Metadata = {
-  title: `Payment didn't go through — ${COMPANY_NAME}`,
+  title: `Payment didn't go through — ${LEGAL_NAME_SHORT}`,
   robots: { index: false, follow: false }
 };
 
@@ -30,7 +30,7 @@ export default function PayFailurePage({
         <div className="mb-8 flex items-center gap-2.5">
           <Logo size={28} />
           <span className="text-sm font-semibold tracking-tight text-white">
-            {COMPANY_NAME}
+            {LEGAL_NAME_SHORT}
           </span>
         </div>
 
@@ -58,7 +58,7 @@ export default function PayFailurePage({
               href="/"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm text-white transition hover:bg-white/10"
             >
-              Back to {COMPANY_NAME}
+              Back to home
             </Link>
           </div>
         </div>

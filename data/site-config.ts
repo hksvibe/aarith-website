@@ -15,6 +15,12 @@ export const COMPANY_NAME = "Aarith";
 // Legal entity name — used in the footer copyright line and on legal pages
 export const LEGAL_NAME = "Imnemosyne Technologies Private Limited";
 
+// Short legal entity name — used in places where space is tight, including
+// the Razorpay Checkout merchant name and the page headers on /pay, /pay/success
+// and /pay/failure. Receipts and payment surfaces show the legal entity that
+// is actually collecting money, not the consumer brand.
+export const LEGAL_NAME_SHORT = "Imnemosyne Technologies Pvt. Ltd.";
+
 // One-line studio tagline — shown under the wordmark in the footer
 export const TAGLINE = "An India-rooted app studio building for the world from Bengaluru.";
 
@@ -243,11 +249,9 @@ export const PRICING_PLANS: {
     priceInr: 99,
     interval: "month",
     features: [
-      "Unlimited loan trackers",
-      "Detailed EMI schedules with prepayment scenarios",
-      "Ad-free experience",
-      "Export to PDF / CSV",
-      "Priority email support"
+      "Unlimited loans",
+      "Auto SMS detection — loans imported automatically",
+      "EMI reminders for all loans"
     ],
     razorpayPlanIdEnv: "RAZORPAY_PLAN_ID_PRO_MONTHLY"
   },
@@ -259,9 +263,9 @@ export const PRICING_PLANS: {
     interval: "year",
     ribbon: "Save ~16%",
     features: [
-      "Everything in Pro Monthly",
-      "Two months free vs. monthly billing",
-      "Early access to new features"
+      "Unlimited loans",
+      "Auto SMS detection — loans imported automatically",
+      "EMI reminders for all loans"
     ],
     razorpayPlanIdEnv: "RAZORPAY_PLAN_ID_PRO_ANNUAL"
   }

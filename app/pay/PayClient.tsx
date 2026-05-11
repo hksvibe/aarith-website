@@ -35,7 +35,7 @@ import * as React from "react";
 import Link from "next/link";
 import { Loader2, ShieldCheck, CreditCard, ArrowLeft } from "lucide-react";
 import { Logo } from "@/components/Logo";
-import { COMPANY_NAME, PRICING_PLANS } from "@/data/site-config";
+import { LEGAL_NAME_SHORT, PRICING_PLANS } from "@/data/site-config";
 
 // Minimal type for Razorpay's global injected by checkout.js
 type RazorpayCheckoutOptions = {
@@ -114,11 +114,15 @@ export function PayClient(props: {
   customerEmail?: string;
   customerPhone?: string;
   autostart?: boolean;
+  // Authoritative price from Razorpay, fetched on the server. Falls back to
+  // the static display price in PRICING_PLANS when this is undefined.
+  livePriceInr?: number;
 }) {
   const plan = React.useMemo(
     () => PRICING_PLANS.find((p) => p.slug === props.planSlug),
     [props.planSlug]
   );
+  const displayPriceInr = props.livePriceInr ?? plan?.priceInr ?? 0;
 
   const [status, setStatus] = React.useState<
     "idle" | "creating" | "ready" | "opening" | "verifying" | "error"
@@ -193,8 +197,8 @@ export function PayClient(props: {
     const rzp = new window.Razorpay({
       key: keyId,
       subscription_id: subscriptionId,
-      name: COMPANY_NAME,
-      description: `${plan.name} — ${COMPANY_NAME}`,
+      name: LEGAL_NAME_SHORT,
+      description: plan.name,
       image: "/aarith-logo.svg",
       prefill: {
         name: props.customerName,
@@ -267,7 +271,7 @@ export function PayClient(props: {
         className="inline-flex items-center gap-1.5 text-xs text-ink-300 hover:text-white"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
-        Back to {COMPANY_NAME}
+        Back to home
       </Link>
 
       <div className="mt-8">
@@ -281,7 +285,7 @@ export function PayClient(props: {
 
         <div className="mt-6 inline-flex items-baseline gap-1.5">
           <span className="text-4xl font-semibold text-white">
-            ₹{plan.priceInr.toLocaleString("en-IN")}
+            ₹{displayPriceInr.toLocaleString("en-IN")}
           </span>
           <span className="text-ink-300">/ {plan.interval}</span>
         </div>
@@ -319,7 +323,7 @@ export function PayClient(props: {
             ) : (
               <>
                 <CreditCard className="h-4 w-4" />
-                Pay ₹{plan.priceInr.toLocaleString("en-IN")} · {plan.interval}
+                Pay ₹{displayPriceInr.toLocaleString("en-IN")} · {plan.interval}
               </>
             )}
           </button>
@@ -332,8 +336,8 @@ export function PayClient(props: {
 
           <p className="flex items-center gap-2 text-xs text-ink-400">
             <ShieldCheck className="h-3.5 w-3.5" />
-            Payments are processed by Razorpay over a secure connection. Aarith
-            never stores your card or UPI details.
+            Payments are processed by Razorpay over a secure connection.{" "}
+            {LEGAL_NAME_SHORT} never stores your card or UPI details.
           </p>
         </div>
       </div>
@@ -366,7 +370,7 @@ function PayShell({ children }: { children: React.ReactNode }) {
         <div className="mb-8 flex items-center gap-2.5">
           <Logo size={28} />
           <span className="text-sm font-semibold tracking-tight text-white">
-            {COMPANY_NAME}
+            {LEGAL_NAME_SHORT}
           </span>
         </div>
         <div className="rounded-3xl border border-white/8 bg-white/[0.02] p-6 md:p-10">

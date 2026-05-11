@@ -11,13 +11,27 @@ import {
   CONTACT,
   LEGAL_NAME
 } from "@/data/site-config";
+import { fetchLivePlan } from "@/lib/razorpay";
 
 export const metadata: Metadata = {
   title: `Pricing — ${COMPANY_NAME}`,
   description: `Subscription pricing for the EMI Calculator & Loan Tracker app and other ${COMPANY_NAME} consumer products. Operated by ${LEGAL_NAME}.`
 };
 
-export default function PricingPage() {
+// Fetch live prices from Razorpay each request so this page never drifts
+// out of sync with what the user will actually be charged.
+export const dynamic = "force-dynamic";
+
+export default async function PricingPage() {
+  // Resolve all plans' live prices in parallel; null fallbacks to the
+  // static `priceInr` in PRICING_PLANS.
+  const liveByslug = new Map<string, number>();
+  await Promise.all(
+    PRICING_PLANS.map(async (p) => {
+      const live = await fetchLivePlan(p.slug);
+      if (live) liveByslug.set(p.slug, live.amountInr);
+    })
+  );
   return (
     <main className="relative">
       <header className="border-b border-white/8 bg-ink-950/80 backdrop-blur">
@@ -62,7 +76,9 @@ export default function PricingPage() {
       <section className="pb-24 md:pb-32">
         <Container>
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {PRICING_PLANS.map((p) => (
+            {PRICING_PLANS.map((p) => {
+              const displayPriceInr = liveByslug.get(p.slug) ?? p.priceInr;
+              return (
               <article
                 key={p.slug}
                 className="relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/8 bg-white/[0.02] p-7 md:p-9"
@@ -79,7 +95,7 @@ export default function PricingPage() {
 
                 <div className="mt-6 inline-flex items-baseline gap-1.5">
                   <span className="text-4xl font-semibold text-white">
-                    ₹{p.priceInr.toLocaleString("en-IN")}
+                    ₹{displayPriceInr.toLocaleString("en-IN")}
                   </span>
                   <span className="text-ink-300">/ {p.interval}</span>
                 </div>
@@ -105,7 +121,8 @@ export default function PricingPage() {
                   </p>
                 </div>
               </article>
-            ))}
+              );
+            })}
           </div>
 
           <div className="mt-12 max-w-3xl text-sm text-ink-300">
