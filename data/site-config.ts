@@ -212,6 +212,61 @@ export const LEGAL = {
   policiesLastUpdated: "2026-04-28"
 };
 
+// ---------------------------------------------------------------------------
+// PRICING — subscription plans offered through aarith.com/pay (the payments
+// surface used by the EMI Calculator & Loan Tracker Android app).
+//
+// Each plan's `razorpayPlanIdEnv` names the env var that holds the Razorpay
+// plan_id created in the Razorpay Dashboard (Subscriptions → Plans). We
+// resolve plans by slug at runtime; the website never ships a plan_id in
+// source.
+// ---------------------------------------------------------------------------
+export const PRICING_PLANS: {
+  slug: string;
+  name: string;
+  tagline: string;
+  // Amount in rupees, for display only. Authoritative price is on Razorpay.
+  priceInr: number;
+  // "month" | "year" — display only.
+  interval: "month" | "year";
+  // Optional savings ribbon shown on the pricing card.
+  ribbon?: string;
+  // Bullets shown on the pricing card.
+  features: string[];
+  // Env var name that stores the Razorpay plan_id (plan_XXXX...).
+  razorpayPlanIdEnv: string;
+}[] = [
+  {
+    slug: "pro_monthly",
+    name: "Pro · Monthly",
+    tagline: "Premium features billed every month. Cancel anytime.",
+    priceInr: 99,
+    interval: "month",
+    features: [
+      "Unlimited loan trackers",
+      "Detailed EMI schedules with prepayment scenarios",
+      "Ad-free experience",
+      "Export to PDF / CSV",
+      "Priority email support"
+    ],
+    razorpayPlanIdEnv: "RAZORPAY_PLAN_ID_PRO_MONTHLY"
+  },
+  {
+    slug: "pro_annual",
+    name: "Pro · Annual",
+    tagline: "Same as Pro Monthly, billed once a year. Better value.",
+    priceInr: 999,
+    interval: "year",
+    ribbon: "Save ~16%",
+    features: [
+      "Everything in Pro Monthly",
+      "Two months free vs. monthly billing",
+      "Early access to new features"
+    ],
+    razorpayPlanIdEnv: "RAZORPAY_PLAN_ID_PRO_ANNUAL"
+  }
+];
+
 // Top nav anchors
 export const NAV_LINKS = [
   { label: "Capabilities", href: "#capabilities" },
@@ -235,7 +290,9 @@ export const FOOTER_COLUMNS = [
     title: "Legal",
     links: [
       { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" }
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Refund & Cancellation", href: "/refund-policy" },
+      { label: "Pricing", href: "/pricing" }
     ]
   }
 ];
